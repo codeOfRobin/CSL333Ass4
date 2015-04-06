@@ -219,7 +219,7 @@ network read_network(string filePath)
                     listIt1=Alarm.search_node(temp);
                     listIt1->add_child(index);
                     values.push_back(temp);
-                    
+
                     ss>>temp;
                     
                 }
@@ -280,13 +280,15 @@ void readRecords(string filePath)
         {
             stringstream ss;
             getline (myfile,line);
-            ss.str(line);
             vector<string> lineInRecords;
-            string temp;
-            for (int i=0; i<Alarm.Pres_Graph.size(); i++)
+            char tab2[1024];
+            strcpy(tab2, line.c_str());
+            char * pch;
+            pch = strtok (tab2," \\ ,");
+            while (pch != NULL)
             {
-                ss>>temp;
-                lineInRecords.push_back(temp);
+                printf ("%s\n",pch);
+                pch = strtok (NULL, " ,.-");
             }
             records.push_back(lineInRecords);
             lineInRecords.clear();
