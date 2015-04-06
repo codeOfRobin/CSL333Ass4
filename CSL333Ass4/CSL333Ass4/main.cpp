@@ -17,6 +17,7 @@
 
 // Format checker just assumes you have Alarm.bif and Solved_Alarm.bif (your file) in current directory
 using namespace std;
+vector<vector<string>> records;
 
 // Our graph consists of a list of nodes where each node is represented as follows:
 class Graph_Node{
@@ -94,9 +95,10 @@ public:
 // The whole network represted as a list of nodes
 class network{
     
-    list <Graph_Node> Pres_Graph;
     
 public:
+    list <Graph_Node> Pres_Graph;
+
     int addNode(Graph_Node node)
     {
         Pres_Graph.push_back(node);
@@ -151,12 +153,12 @@ public:
     
 };
 
-network read_network()
+network read_network(string filePath)
 {
     network Alarm;
     string line;
     int find=0;
-    ifstream myfile("/Users/robinmalhotra2/Developer/CSL333Ass4/alarm.bif");
+    ifstream myfile(filePath);
     string temp;
     string name;
     vector<string> values;
@@ -265,12 +267,39 @@ network read_network()
     return Alarm;
 }
 
+network Alarm;
+
+
+void readRecords(string filePath)
+{
+    ifstream myfile(filePath);
+    string line;
+    if (myfile.is_open())
+    {
+        while (! myfile.eof() )
+        {
+            stringstream ss;
+            getline (myfile,line);
+            ss.str(line);
+            vector<string> lineInRecords;
+            string temp;
+            for (int i=0; i<Alarm.Pres_Graph.size(); i++)
+            {
+                ss>>temp;
+                lineInRecords.push_back(temp);
+            }
+            records.push_back(lineInRecords);
+            lineInRecords.clear();
+            
+        }
+    }
+    
+}
 
 int main()
 {
-    network Alarm;
-    Alarm=read_network();
-    
+    Alarm=read_network("/Users/robinmalhotra2/Developer/CSL333Ass4/alarm.bif");
+    readRecords("/Users/robinmalhotra2/Developer/CSL333Ass4/CSL333Ass4/CSL333Ass4/records.dat");
     // Example: to do something
     cout<<"Perfect! Hurrah! \n";
     
