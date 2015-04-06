@@ -156,7 +156,7 @@ network read_network()
     network Alarm;
     string line;
     int find=0;
-    ifstream myfile("alarm.bif");
+    ifstream myfile("/Users/robinmalhotra2/Developer/CSL333Ass4/alarm.bif");
     string temp;
     string name;
     vector<string> values;

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>690641F7-49B3-47CC-9AFB-D9DED32EE14E</string>
+	<key>IDESourceControlProjectName</key>
+	<string>CSL333Ass4</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>E71B13D2A020D12A8DE96E5E38A957AA15E7DFB2</key>
+		<string>https://github.com/codeofRobin/CSL333Ass4.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>CSL333Ass4/CSL333Ass4.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>E71B13D2A020D12A8DE96E5E38A957AA15E7DFB2</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/codeofRobin/CSL333Ass4.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>E71B13D2A020D12A8DE96E5E38A957AA15E7DFB2</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>E71B13D2A020D12A8DE96E5E38A957AA15E7DFB2</string>
+			<key>IDESourceControlWCCName</key>
+			<string>CSL333Ass4</string>
+		</dict>
+	</array>
+</dict>
+</plist>
