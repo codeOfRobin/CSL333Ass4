@@ -18,6 +18,8 @@
 // Format checker just assumes you have Alarm.bif and Solved_Alarm.bif (your file) in current directory
 using namespace std;
 vector<vector<string>> records;
+vector<int>missingIndices;
+
 
 // Our graph consists of a list of nodes where each node is represented as follows:
 class Graph_Node{
@@ -267,7 +269,20 @@ network read_network(string filePath)
     return Alarm;
 }
 
+
+
 network Alarm;
+
+
+
+vector<string> possibleValues(int index)
+{
+    return Alarm.get_nth_node(index)->get_values();
+}
+
+
+
+
 
 
 void readRecords(string filePath)
@@ -285,10 +300,20 @@ void readRecords(string filePath)
             strcpy(tab2, line.c_str());
             char * pch;
             pch = strtok (tab2," \\ ,");
+            int index=0;
+            string word;
             while (pch != NULL)
             {
-                printf ("%s\n",pch);
+                word=string(pch);
+                word=word.substr(1,word.size()-2);
+                if (strcmp(word.c_str(), "?")==0)
+                {
+                    missingIndices.push_back(index);
+                }
+                lineInRecords.push_back(word);
                 pch = strtok (NULL, " ,.-");
+                
+                index++;
             }
             records.push_back(lineInRecords);
             lineInRecords.clear();
