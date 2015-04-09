@@ -67,11 +67,11 @@ public:
 		nodes.at(nodeNumber).is_initialized=true;
 	}
 
-	void get_locs(int node_id, int index, vector<int> &locs){
+	void get_locs(int node_id, int index, vector<pair<int,int> > &locs){
 
 	}
 
-	int get_index(int node_id, vector<int> &locs){
+	int get_index(int node_id, vector<pair<int,int> > &locs){
 		//TODO: write the mapping from index to value in the array.
 		return 1;
 	}
@@ -98,6 +98,7 @@ public:
 
 	}
 
+	void calculate_probabilities()
 	void maximization_step(){
 		if(!iter_count){
 			//if it is the first iteration, update by max-count values
