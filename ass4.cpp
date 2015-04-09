@@ -50,6 +50,7 @@ public:
 	matrix data;
 	matrix data_transpose;
 	vector<int> iscomplete;
+	vector<vector<float> > missing_distributions;
 	int data_nonzero;
 	int iter_count;
 	int smoothing;
@@ -122,10 +123,8 @@ public:
 
 	void expectation_step(){
 		//estimate the distribution of the missing values
-		iter(i, data.size()){
-			int missing_value = iscomplete.at(i);
 
-		}
+
 	}
 
 	void maximization_step(){
@@ -134,7 +133,25 @@ public:
 		}
 		else{
 			//not the first iteration, account for missing values
-			//iter(i,data.size())
+			vector<vector<float> > counts;
+			vector<vector<float> > sums;
+
+			iter(i,nodes.size()){
+				int rev_val = nodes.at(i).probs.size()/nodes.at(i).values.size();
+				vec temp2(rev_val,0);
+				vec temp(nodes.at(i).probs.size(),0);
+				counts.push_back(temp);
+				sums.push_back(temp2);
+			}
+			//created counts and sums table to normalize
+
+			iter(i,data.size()){
+				iter(j,data.at(0).size()){
+					vector<int> parents = nodes.at(j).parents;
+					parents.insert(parents.begin(),j);
+					
+				}
+			}
 		}
 	}
 
@@ -206,69 +223,6 @@ public:
 	  			cout<<"inserted probabilities for node "<<node_id<<endl;
 	  		}
 	  	}
-	   //  if (myfile.is_open()){
-	   //  	while (!myfile.eof()){
-	   //  		stringstream ss;
-	   //    		getline (myfile,line);
-	      		
-	   //    		ss.str(line);
-	   //   		ss>>temp;
-
-	   //   		if(temp.compare("variable")==0){  
-    //  				ss>>name;
-    //  				getline (myfile,line);
-                   
-    //  				stringstream ss2;
-    //  				ss2.str(line);
-    //  				for(int i=0;i<4;i++){
-    //  					ss2>>temp;	
-    //  				}
-    //  				values.clear();
-    //  				while(temp.compare("};")!=0){
-    //  					temp.erase(remove(all(temp),'\"'),temp.end());
-    //  					values.push_back(temp);
-    //  					ss2>>temp;
-    // 				}
-
-    // 				//trimming the quotes
-    // 				temp.erase(remove(all(name),'\"'),temp.end());
-    // 				insert(name, values);
-	   //   		}
-	   //   		else if(temp.compare("probability")==0){
-	                 
-	   //   				ss>>temp;
-	   //   				ss>>temp;
-	     				
-	   //   				int node_id = get_node(temp);
-
-	   //                  ss>>temp;
-	   //                  values.clear();
-	   //   				while(temp.compare(")")!=0){
-	   //                      int parent_id = get_node(temp);
-	   //                      nodes.at(node_id).parents.push_back(parent_id);
-	   //                      nodes.at(parent_id).children.push_back(node_id);
-	   //   					ss>>temp;
-	   //  				}
-
-	   //  				getline (myfile,line);
-	   //   				stringstream ss2;
-	                    
-	   //   				ss2.str(line);
-	   //   				ss2>> temp;
-	   //   				ss2>> temp;
-	                    
-	   //   				vector<float> curr_CPT;
-	   //                  string::size_type sz;
-	   //   				while(temp.compare(";")!=0){
-	   //   					curr_CPT.push_back(atof(temp.c_str()));
-	   //   					ss2>>temp;
-	   //  				}
-	                    
-	   //                  insert_probs(node_id,curr_CPT);
-	   //   		}
-	   //  	}
-	   //  	myfile.close();
-	  	// }	
 	}
 
 	float get_likelihood(vector<int> settings){
@@ -319,31 +273,6 @@ public:
 	    	}
 	    	records.push_back(words);
 	    }
-	    // if (myfile.is_open()){
-	    //     while (! myfile.eof() ){
-	    //         stringstream ss;
-	    //         getline (myfile,line);
-	    //         vector<string> lineInRecords;
-	    //         char tab2[1024];
-	    //         strcpy(tab2, line.c_str());
-	    //         char * pch;
-	    //         pch = strtok (tab2," \\ ,");
-	    //         int index=0;
-	    //         string word;
-	    //         while (pch != NULL){
-	    //             word=string(pch);
-	    //             word=word.substr(1,word.size()-2);
-	    //             word.erase(remove(all(word),'\"'),word.end());
-	    //             lineInRecords.push_back(word);
-	    //             pch = strtok (NULL, " ,.-");
-	                
-	    //             index++;
-	    //         }
-	    //         records.push_back(lineInRecords);
-	    //         lineInRecords.clear();
-	            
-	    //     }
-    	// }
 
     	myfile.close();
     	data.clear();
@@ -388,7 +317,6 @@ public:
 	        getline (myfile,line);
 	        while (! myfile.eof() )
 	        {
-	            if(ex!=0) outFile<<"\n";
 	            if (line.find("table") != string::npos)
 	            {
 	                outFile<<"\ttable ";
@@ -396,12 +324,13 @@ public:
 	                	outFile<<nodes.at(table_count).probs.at(i)<<" ";
 	                }
 	                table_count++;
-	                outFile<<";\n";
+	                outFile<<";";
 	            }
 	            else
 	            {
 	                outFile<<line;
 	            }
+	            outFile<<"\n";
 	            ex++;
 	            getline (myfile,line);
 	        }
@@ -434,15 +363,23 @@ public:
 		iter(i,data_transpose.at(col).size()) sum+=data_transpose.at(col).at(i);
 		return sum;
 	}
+
+	vector<pair<int,int> > join_vec(vector<int> a, vector<int> b){
+		vector<pair<int,int> > out;
+		iter(i,a.size()){
+			out.push_back(make_pair(a.at(i),b.at(i)));
+		}
+		return out;
+	}
 };
 
 int main(int argc, char* argv[]){
 	graph g;
 	g.init("./alarm.bif");
 	g.read_records("./records.dat");
-	g.smoothing=1;
+	g.smoothing=100;
 	g.get_complete_probs();
-	g.write_bif("./alarm.bif","./new_alarm.bif");
+	g.write_bif("./alarm.bif","./solved_alarm.bif");
 	cout<<g.data.size()<<" "<<g.data.at(0).size()<<endl;
 	return 0;
 }
