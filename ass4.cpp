@@ -71,7 +71,7 @@ public:
 
 	}
 
-	int get_index(int node_id, vector<pair<int,int> > &locs){
+	int get_index(int node_id, vector<pair<int,int> > locs){
 		//TODO: write the mapping from index to value in the array.
 		return 1;
 	}
