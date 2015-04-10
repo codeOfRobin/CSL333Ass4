@@ -140,9 +140,6 @@ public:
 			iter(j,n_miss){
 				vector<int> new_data = data.at(i);
 				new_data.at(iscomplete.at(i))=j;
-				// cout<<temp.at(j)<<" ";
-				// iter(k,new_data.size()) cout<<new_data.at(k)<<" ";
-				// cout<<endl;
 				missing_distributions.push_back(make_pair(temp.at(j),new_data));
 			}
 		}
@@ -447,9 +444,17 @@ public:
 
 	void print_probs(){
 		iter(i,nodes.size()){
-			cout<<nodes.at(i).name<<" ";
+			int rev_val = nodes.at(i).probs.size()/nodes.at(i).values.size();
+			cout<<nodes.at(i).name<<"";
+			vec sums(rev_val,0);
 			iter(j,nodes.at(i).probs.size()){
+				if(j%rev_val==0) cout<<"\n";
 				cout<<nodes.at(i).probs.at(j)<<" ";
+				sums.at(j%rev_val)+=nodes.at(i).probs.at(j);
+			}
+			cout<<endl;
+			iter(j,rev_val){
+				cout<<sums.at(j)<<" ";
 			}
 			cout<<endl;
 		}
@@ -485,15 +490,15 @@ public:
 int main(int argc, char* argv[]){
 	double t_init=get_wall_time();
 	graph g;
-	g.init("./alarm.bif");
+	g.init("./small.bif");
 	graph g2;
-	g2.init("./gold_alarm.bif");
+	g2.init("./small.bif");
 	g.read_records(string(argv[1]));
-	g.smoothing=0;
+	g.smoothing=1;
 	g.init_mds();
 	cout<<"Complete prob estimation complete, error: "<<g.get_diff(g2)<<"."<<endl;
 	//using complete probs to get initial probability
-	g.write_bif("./alarm.bif","./iter_alarm.bif");
+	g.write_bif("./small.bif","./iter_small.bif");
 	//initial value of probs.	
 	double t_final=get_wall_time();
 
@@ -505,7 +510,7 @@ int main(int argc, char* argv[]){
 		cout<<"EM step complete, error:"<<g.get_diff(g2)<<",in time "<<t_final-t_init<<" seconds."<<endl;
 		cout<<"<<<<<<ITER "<<g.iter_count<<" COMPLETED>>>>>"<<endl;
 	}	
-	g.write_bif("./alarm.bif","./iter_alarm.bif");
+	g.write_bif("./small.bif","./iter_small.bif");
 
 	cout<<g.data.size()<<" "<<g.data.at(0).size()<<endl;
 	return 0;

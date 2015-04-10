@@ -1,0 +1,18 @@
+variable “X” {
+type discrete[2] { “True” “False” };
+}
+variable “Y” {
+type discrete[2] { “True” “False” };
+}
+variable “Z” {
+type discrete[2] { “True” “False” };
+}
+probability ( “X” ) { 
+	table 0.5 0.5 ;
+}
+probability ( “Y” ) { 
+	table 0.5 0.5 ;
+}
+probability ( “Z” “X” “Y” ) {
+	table 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 ;
+}
