@@ -55,10 +55,10 @@ class graph{
 public:
 	vector<node> nodes;
 	int counter;
-	matrix data;
-	matrix data_transpose;
+	vector<vector<int> > data;
+	vector<vector<int> > data_transpose;
 	vector<int> iscomplete;
-	vector<pair<double, vector<double> > > missing_distributions;
+	vector<pair<double, vector<int> > > missing_distributions;
 	int data_nonzero;
 	int iter_count;
 	int smoothing;
@@ -119,15 +119,6 @@ public:
 		nodes.at(node_id).probs.at(get_index(node_id,locs)) = val;
 	}
 
-
-	void init_nodes(matrix data){
-		iter(node,nodes.size()){
-			if(!nodes.at(node).is_initialized){
-				vec probs;
-			}
-		}
-	}
-
 	void expectation_step(){
 		//estimate the distribution of the missing values
 		iter(i,data.size()){
@@ -135,18 +126,23 @@ public:
 			vec temp;
 			double sum=0;
 			iter(j,n_miss){
-				vec new_data = data.at(i);
+				vector<int> new_data = data.at(i);
 				new_data.at(iscomplete.at(i))=j;
 				double t = get_likelihood(new_data);
 				temp.push_back(t);
 				sum+=t;
 			}
-			iter(j,n_miss){
-				temp.at(j)/=sum;
+			if(sum!=0){
+				iter(j,n_miss){
+					temp.at(j)/=sum;
+				}
 			}
 			iter(j,n_miss){
-				vec new_data = data.at(i);
+				vector<int> new_data = data.at(i);
 				new_data.at(iscomplete.at(i))=j;
+				// cout<<temp.at(j)<<" ";
+				// iter(k,new_data.size()) cout<<new_data.at(k)<<" ";
+				// cout<<endl;
 				missing_distributions.push_back(make_pair(temp.at(j),new_data));
 			}
 		}
@@ -162,15 +158,19 @@ public:
 				vector<pair<int,int> > locs;
 				get_locs(i,j,locs);
 				locs_vec.push_back(locs);
-				double probs = get_count_vec2(locs);
+				double probs = get_count_vec2(locs)+smoothing;
 				probs_sum.at(j%rev_val)+=probs;
 				probsval.push_back(probs);
 			}
 			iter(j,nodes.at(i).probs.size()){
+				if(probs_sum.at(j%rev_val)!=0)
 				set_prob(i,locs_vec.at(j),probsval.at(j)/probs_sum.at(j%rev_val));
+				else
+				set_prob(i,locs_vec.at(j),0);
 			}
 		}
 		missing_distributions.clear();
+		iter_count++;
 	}
 
 	void init(string filename){
@@ -205,7 +205,6 @@ public:
 	    			}
 	    		}
 	    		insert(ft_name,values);
-	    		cout<<"inserted node "<<ft_name<<endl;
 	  		}
 	  		else if(temp_word=="probability"){
 	  			//line describing probability
@@ -224,7 +223,6 @@ public:
  					iss>>temp_word;
 	  			}
 
-	  			cout<<"inserted parents for node "<<node_id<<endl;
 	  			getline(myfile,line);
 	  			istringstream nss(line);
 	  			vec probs(0,0);
@@ -238,18 +236,34 @@ public:
 	  				}
 	  			}
 	  			insert_probs(node_id,probs);
-	  			cout<<"inserted probabilities for node "<<node_id<<endl;
 	  		}
 	  	}
 	}
-	double get_likelihood(vector<double> settings){
+
+	double get_likelihood(vector<int> settings){
 		double l=1;
 		iter(i,nodes.size()){
 			vector<pair<int,int> > parents_settings;
 			iter(j,nodes.at(i).parents.size()){
-				parents_settings.push_back(make_pair(nodes.at(i).parents.at(j),(int)(settings.at(nodes.at(i).parents.at(j)))));
+				parents_settings.push_back(make_pair(nodes.at(i).parents.at(j),settings.at(nodes.at(i).parents.at(j))));
 				//cout<<"node: "<<i<<" parent: "<<nodes.at(i).parents.at(j)<<" settings: "<<settings.at(nodes.at(i).parents.at(j))<<" prob: "<<get_prob(i,parents_settings)<<endl;
 			}
+			double tpro = get_prob(i,parents_settings);
+			l*=get_prob(i,parents_settings);		
+		}
+		return l;
+	}
+
+	double get_l_debug(vector<int> settings){
+		double l=1;
+		iter(i,nodes.size()){
+			vector<pair<int,int> > parents_settings;
+			iter(j,nodes.at(i).parents.size()){
+				parents_settings.push_back(make_pair(nodes.at(i).parents.at(j),settings.at(nodes.at(i).parents.at(j))));
+				//cout<<"node: "<<i<<" parent: "<<nodes.at(i).parents.at(j)<<" settings: "<<settings.at(nodes.at(i).parents.at(j))<<" prob: "<<get_prob(i,parents_settings)<<endl;
+			}
+			double tpro = get_prob(i,parents_settings);
+			cout<<tpro<<" ";
 			l*=get_prob(i,parents_settings);		
 		}
 		return l;
@@ -317,7 +331,7 @@ public:
     	data_nonzero=0;
 
     	iter(i,records.size()){
-    		vec temp;
+    		vector<int> temp;
     		int iscomplete_i=-1;
     		iter(j,records.at(i).size()){
     			string rv = records.at(i).at(j);
@@ -336,7 +350,7 @@ public:
     	print("file read successfully\n");
 
     	iter(i,data.at(0).size()){
-    		vec temp;
+    		vector<int> temp;
     		iter(j,data.size()){
     			temp.push_back(data.at(j).at(i));
     		}
@@ -430,6 +444,42 @@ public:
 		}
 		return diff;
 	}
+
+	void print_probs(){
+		iter(i,nodes.size()){
+			cout<<nodes.at(i).name<<" ";
+			iter(j,nodes.at(i).probs.size()){
+				cout<<nodes.at(i).probs.at(j)<<" ";
+			}
+			cout<<endl;
+		}
+	}
+
+	void init_mds(){
+		iter(i,data.size()){
+			int n_miss = nodes.at(iscomplete.at(i)).values.size();
+			vec temp;
+			double sum=0;
+			iter(j,n_miss){
+				vector<int> new_data = data.at(i);
+				new_data.at(iscomplete.at(i))=j;
+				double t = 1;
+				temp.push_back(t);
+				sum+=t;
+			}
+			iter(j,n_miss){
+				temp.at(j)/=sum;
+			}
+			iter(j,n_miss){
+				vector<int> new_data = data.at(i);
+				new_data.at(iscomplete.at(i))=j;
+				// cout<<temp.at(j)<<" ";
+				// iter(k,new_data.size()) cout<<new_data.at(k)<<" ";
+				// cout<<endl;
+				missing_distributions.push_back(make_pair(temp.at(j),new_data));
+			}
+		}
+	}
 };
 
 int main(int argc, char* argv[]){
@@ -438,27 +488,25 @@ int main(int argc, char* argv[]){
 	g.init("./alarm.bif");
 	graph g2;
 	g2.init("./gold_alarm.bif");
-	g.read_records("./records.dat");
-	g.smoothing=10;
-	g.get_complete_probs();
-	cout<<"Initial error:"<<g.get_diff(g2)<<endl;
-	iter(i,g.missing_distributions.size()) cout<<g.missing_distributions.at(i).first<<" ";
-	cout<<endl;
-	g.get_complete_probs();
-	g.write_bif("./alarm.bif","./init_alarm.bif");
-	vec tt(37,0);
-	cout<<"ABD "<<g.get_likelihood(tt)<<endl;
+	g.read_records(string(argv[1]));
+	g.smoothing=0;
+	g.init_mds();
+	cout<<"Complete prob estimation complete, error: "<<g.get_diff(g2)<<"."<<endl;
+	//using complete probs to get initial probability
+	g.write_bif("./alarm.bif","./iter_alarm.bif");
 	//initial value of probs.	
 	double t_final=get_wall_time();
+
 	while(t_final-t_init<570){
-		cout<<g.missing_distributions.size()<<endl;
+		g.maximization_step();
 		g.expectation_step();
-		cout<<g.missing_distributions.size()<<endl;
-		g.maximization_step();	
-		cout<<"EM step complete, error:"<<g.get_diff(g2)<<",in time "<<t_final-t_init<<" seconds."<<endl;
+		g.print_probs();
 		t_final=get_wall_time();	
-		g.write_bif("./alarm.bif","./solved_alarm.bif");
-	}
+		cout<<"EM step complete, error:"<<g.get_diff(g2)<<",in time "<<t_final-t_init<<" seconds."<<endl;
+		cout<<"<<<<<<ITER "<<g.iter_count<<" COMPLETED>>>>>"<<endl;
+	}	
+	g.write_bif("./alarm.bif","./iter_alarm.bif");
+
 	cout<<g.data.size()<<" "<<g.data.at(0).size()<<endl;
 	return 0;
 }
