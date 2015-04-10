@@ -153,113 +153,113 @@ variable  "Intubation" { //3 values
 	property "position = (843, 86)" ;
 }
 probability (  "Hypovolemia" ) { //1 variable(s) and 2 values
-	table 0.5 0.5 ;
+	table -nan -nan ;
 }
 probability (  "StrokeVolume"  "LVFailure"  "Hypovolemia" ) { //3 variable(s) and 12 values
-	table 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 ;
+	table -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan ;
 }
 probability (  "LVFailure" ) { //1 variable(s) and 2 values
-	table 0.5 0.5 ;
+	table -nan -nan ;
 }
 probability (  "LVEDVolume"  "Hypovolemia"  "LVFailure" ) { //3 variable(s) and 12 values
-	table 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 ;
+	table -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan ;
 }
 probability (  "PCWP"  "LVEDVolume" ) { //2 variable(s) and 9 values
-	table 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 ;
+	table -nan -nan -nan -nan -nan -nan -nan -nan -nan ;
 }
 probability (  "CVP"  "LVEDVolume" ) { //2 variable(s) and 9 values
-	table 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 ;
+	table -nan -nan -nan -nan -nan -nan -nan -nan -nan ;
 }
 probability (  "History"  "LVFailure" ) { //2 variable(s) and 4 values
-	table 0.5 0.5 0.5 0.5 ;
+	table -nan -nan -nan -nan ;
 }
 probability (  "MinVolSet" ) { //1 variable(s) and 3 values
-	table 0.333333 0.333333 0.333333 ;
+	table -nan -nan -nan ;
 }
 probability (  "VentMach"  "MinVolSet" ) { //2 variable(s) and 12 values
-	table 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 ;
+	table -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan ;
 }
 probability (  "Disconnect" ) { //1 variable(s) and 2 values
-	table 0.5 0.5 ;
+	table -nan -nan ;
 }
 probability (  "VentTube"  "VentMach"  "Disconnect" ) { //3 variable(s) and 32 values
-	table 0.25 -1.5522e-10 -1.5522e-10 -2.32831e-10 0.25 0.25 0.25 0.25 0.25 0.333333 0.333333 -2.32831e-10 0.25 0.25 0.25 0.25 0.25 0.333333 0.333333 0.5 0.25 0.25 0.25 0.25 0.25 0.333333 0.333333 0.5 0.25 0.25 0.25 0.25 ;
+	table -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan ;
 }
 probability (  "KinkedTube" ) { //1 variable(s) and 2 values
-	table 0.5 0.5 ;
+	table -nan -nan ;
 }
 probability (  "Press"  "KinkedTube"  "Intubation"  "VentTube" ) { //4 variable(s) and 96 values
-	table 0.25 0.25 0.25 0.25 0.333333 0.333333 0.333333 0.333333 0.25 0.333333 0.333333 0.25 -2.32831e-10 0.25 0.333333 0.25 -1.5522e-10 -1.5522e-10 -2.32831e-10 -2.32831e-10 -1.5522e-10 0.333333 -4.65661e-10 -2.32831e-10 0.25 0.25 0.25 0.25 -1.5522e-10 -1.5522e-10 -1.5522e-10 -1.5522e-10 0.25 -1.5522e-10 -1.5522e-10 0.25 -2.32831e-10 0.25 -1.5522e-10 0.25 0.333333 0.333333 0.5 0.5 0.333333 -1.5522e-10 -4.65661e-10 0.5 0.25 0.25 0.25 0.25 0.333333 0.333333 0.333333 0.333333 0.25 0.333333 0.333333 0.25 0.5 0.25 0.333333 0.25 0.333333 0.333333 -2.32831e-10 -2.32831e-10 0.333333 0.333333 -4.65661e-10 -2.32831e-10 0.25 0.25 0.25 0.25 0.333333 0.333333 0.333333 0.333333 0.25 0.333333 0.333333 0.25 0.5 0.25 0.333333 0.25 0.333333 0.333333 0.5 0.5 0.333333 0.333333 1 0.5 ;
+	table -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan ;
 }
 probability (  "ErrLowOutput" ) { //1 variable(s) and 2 values
-	table 0.5 0.5 ;
+	table -nan -nan ;
 }
 probability (  "HRBP"  "ErrLowOutput"  "HR" ) { //3 variable(s) and 18 values
-	table 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 ;
+	table -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan ;
 }
 probability (  "ErrCauter" ) { //1 variable(s) and 2 values
-	table 0.5 0.5 ;
+	table -nan -nan ;
 }
 probability (  "HREKG"  "HR"  "ErrCauter" ) { //3 variable(s) and 18 values
-	table 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 ;
+	table -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan ;
 }
 probability (  "HRSat"  "HR"  "ErrCauter" ) { //3 variable(s) and 18 values
-	table 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 ;
+	table -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan ;
 }
 probability (  "BP"  "CO"  "TPR" ) { //3 variable(s) and 27 values
-	table 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 ;
+	table -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan ;
 }
 probability (  "CO"  "HR"  "StrokeVolume" ) { //3 variable(s) and 27 values
-	table 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 ;
+	table -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan ;
 }
 probability (  "HR"  "Catechol" ) { //2 variable(s) and 6 values
-	table 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 ;
+	table -nan -nan -nan -nan -nan -nan ;
 }
 probability (  "TPR"  "Anaphylaxis" ) { //2 variable(s) and 6 values
-	table 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 ;
+	table -nan -nan -nan -nan -nan -nan ;
 }
 probability (  "Anaphylaxis" ) { //1 variable(s) and 2 values
-	table 0.5 0.5 ;
+	table -nan -nan ;
 }
 probability (  "InsuffAnesth" ) { //1 variable(s) and 2 values
-	table 0.5 0.5 ;
+	table -nan -nan ;
 }
 probability (  "PAP"  "PulmEmbolus" ) { //2 variable(s) and 6 values
-	table 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 ;
+	table -nan -nan -nan -nan -nan -nan ;
 }
 probability (  "PulmEmbolus" ) { //1 variable(s) and 2 values
-	table 0.5 0.5 ;
+	table -nan -nan ;
 }
 probability (  "FiO2" ) { //1 variable(s) and 2 values
-	table 0.5 0.5 ;
+	table -nan -nan ;
 }
 probability (  "Catechol"  "InsuffAnesth"  "SaO2"  "TPR"  "ArtCO2" ) { //5 variable(s) and 108 values
-	table 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 -4.65661e-10 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 -4.65661e-10 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 1 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 1 0.5 0.5 0.5 0.5 0.5 0.5 0.5 ;
+	table -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan ;
 }
 probability (  "SaO2"  "Shunt"  "PVSat" ) { //3 variable(s) and 18 values
-	table 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 ;
+	table -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan ;
 }
 probability (  "Shunt"  "PulmEmbolus"  "Intubation" ) { //3 variable(s) and 12 values
-	table 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 ;
+	table -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan ;
 }
 probability (  "PVSat"  "VentAlv"  "FiO2" ) { //3 variable(s) and 24 values
-	table 0.333333 -2.32831e-10 -2.32831e-10 0.5 0.333333 0.333333 0.333333 0.333333 0.333333 0.5 0.5 0.5 0.333333 0.333333 0.333333 0.333333 0.333333 0.5 0.5 -2.32831e-10 0.333333 0.333333 0.333333 0.333333 ;
+	table -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan ;
 }
 probability (  "MinVol"  "VentLung"  "Intubation" ) { //3 variable(s) and 48 values
-	table 0.25 0.25 0.25 0.25 0.25 0.25 0.5 0.333333 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 -2.32831e-10 -1.5522e-10 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.5 0.333333 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 -2.32831e-10 0.333333 0.25 0.25 0.25 0.25 ;
+	table -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan ;
 }
 probability (  "ExpCO2"  "ArtCO2"  "VentLung" ) { //3 variable(s) and 48 values
-	table 0.25 0.25 0.25 -1.5522e-10 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.333333 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.333333 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.333333 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 ;
+	table -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan ;
 }
 probability (  "ArtCO2"  "VentAlv" ) { //2 variable(s) and 12 values
-	table 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 0.333333 ;
+	table -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan ;
 }
 probability (  "VentAlv"  "Intubation"  "VentLung" ) { //3 variable(s) and 48 values
-	table 0.25 0.25 0.25 0.25 0.25 0.25 0.333333 0.25 0.333333 0.25 0.25 0.333333 0.25 0.25 0.25 0.25 0.25 0.25 0.333333 0.25 0.333333 0.25 0.25 -1.5522e-10 0.25 0.25 0.25 0.25 0.25 0.25 -1.5522e-10 0.25 0.333333 0.25 0.25 0.333333 0.25 0.25 0.25 0.25 0.25 0.25 0.333333 0.25 -1.5522e-10 0.25 0.25 0.333333 ;
+	table -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan ;
 }
 probability (  "VentLung"  "KinkedTube"  "VentTube"  "Intubation" ) { //4 variable(s) and 96 values
-	table 0.25 0.25 -1.5522e-10 -1.5522e-10 -1.5522e-10 -2.32831e-10 -1.5522e-10 -2.32831e-10 0.25 -1.5522e-10 -1.5522e-10 -2.32831e-10 0.25 0.25 -2.32831e-10 -1.5522e-10 0.333333 -2.32831e-10 -2.32831e-10 -2.32831e-10 0.25 -2.32831e-10 -2.32831e-10 -4.65661e-10 0.25 0.25 0.333333 0.333333 0.333333 0.5 0.333333 0.5 0.25 0.333333 0.333333 -2.32831e-10 0.25 0.25 -2.32831e-10 0.333333 -1.5522e-10 -2.32831e-10 -2.32831e-10 -2.32831e-10 0.25 -2.32831e-10 -2.32831e-10 -4.65661e-10 0.25 0.25 0.333333 0.333333 0.333333 -2.32831e-10 0.333333 -2.32831e-10 0.25 0.333333 0.333333 0.5 0.25 0.25 0.5 0.333333 0.333333 0.5 0.5 0.5 0.25 0.5 0.5 -4.65661e-10 0.25 0.25 0.333333 0.333333 0.333333 0.5 0.333333 0.5 0.25 0.333333 0.333333 0.5 0.25 0.25 0.5 0.333333 0.333333 0.5 0.5 0.5 0.25 0.5 0.5 1 ;
+	table -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan -nan ;
 }
 probability (  "Intubation" ) { //1 variable(s) and 3 values
-	table 0.333333 0.333333 0.333333 ;
+	table -nan -nan -nan ;
 }

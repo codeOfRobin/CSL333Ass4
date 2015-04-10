@@ -13,9 +13,9 @@
 
 using namespace std;
 
-typedef vector<vector<float> > matrix;
+typedef vector<vector<double> > matrix;
 typedef vector<vector<bool> > boolmat;
-typedef vector<float> vec;
+typedef vector<double> vec;
 
 #define all(a) a.begin(),a.end()
 #define print(x) cout<<x
@@ -58,7 +58,7 @@ public:
 	matrix data;
 	matrix data_transpose;
 	vector<int> iscomplete;
-	vector<pair<float, vector<float> > > missing_distributions;
+	vector<pair<double, vector<double> > > missing_distributions;
 	int data_nonzero;
 	int iter_count;
 	int smoothing;
@@ -111,11 +111,11 @@ public:
 		return index;
 	}
 
-	float get_prob(int node_id, vector<pair<int,int> > locs){
+	double get_prob(int node_id, vector<pair<int,int> > locs){
 		return nodes.at(node_id).probs.at(get_index(node_id,locs));
 	}
 
-	void set_prob(int node_id, vector<pair<int,int> > locs, float val){
+	void set_prob(int node_id, vector<pair<int,int> > locs, double val){
 		nodes.at(node_id).probs.at(get_index(node_id,locs)) = val;
 	}
 
@@ -130,15 +130,14 @@ public:
 
 	void expectation_step(){
 		//estimate the distribution of the missing values
-		missing_distributions.clear();
 		iter(i,data.size()){
 			int n_miss = nodes.at(iscomplete.at(i)).values.size();
 			vec temp;
-			float sum=0;
+			double sum=0;
 			iter(j,n_miss){
 				vec new_data = data.at(i);
 				new_data.at(iscomplete.at(i))=j;
-				float t = exp(get_loglikelihood(new_data));
+				double t = get_likelihood(new_data);
 				temp.push_back(t);
 				sum+=t;
 			}
@@ -163,7 +162,7 @@ public:
 				vector<pair<int,int> > locs;
 				get_locs(i,j,locs);
 				locs_vec.push_back(locs);
-				float probs = get_count_vec(locs)+smoothing;
+				double probs = get_count_vec2(locs);
 				probs_sum.at(j%rev_val)+=probs;
 				probsval.push_back(probs);
 			}
@@ -171,6 +170,7 @@ public:
 				set_prob(i,locs_vec.at(j),probsval.at(j)/probs_sum.at(j%rev_val));
 			}
 		}
+		missing_distributions.clear();
 	}
 
 	void init(string filename){
@@ -242,9 +242,21 @@ public:
 	  		}
 	  	}
 	}
+	double get_likelihood(vector<double> settings){
+		double l=1;
+		iter(i,nodes.size()){
+			vector<pair<int,int> > parents_settings;
+			iter(j,nodes.at(i).parents.size()){
+				parents_settings.push_back(make_pair(nodes.at(i).parents.at(j),(int)(settings.at(nodes.at(i).parents.at(j)))));
+				//cout<<"node: "<<i<<" parent: "<<nodes.at(i).parents.at(j)<<" settings: "<<settings.at(nodes.at(i).parents.at(j))<<" prob: "<<get_prob(i,parents_settings)<<endl;
+			}
+			l*=get_prob(i,parents_settings);		
+		}
+		return l;
+	}
 
-	float get_loglikelihood(vector<float> settings){
-		float sum=0;
+	double get_loglikelihood(vector<double> settings){
+		double sum=0;
 		iter(i,nodes.size()){
 			vector<pair<int,int> > parents_settings;
 			iter(j,nodes.at(i).parents.size()){
@@ -255,7 +267,7 @@ public:
 		return sum;
 	}
 
-	float get_complete_probs(){
+	double get_complete_probs(){
 		iter(i,nodes.size()){
 			int rev_val = nodes.at(i).probs.size()/nodes.at(i).values.size();
 			vec probs_sum(rev_val,0);
@@ -265,12 +277,20 @@ public:
 				vector<pair<int,int> > locs;
 				get_locs(i,j,locs);
 				locs_vec.push_back(locs);
-				float probs = get_count_vec(locs)+smoothing;
+				double probs = get_count_vec(locs)+smoothing;
 				probs_sum.at(j%rev_val)+=probs;
 				probsval.push_back(probs);
 			}
 			iter(j,nodes.at(i).probs.size()){
 				set_prob(i,locs_vec.at(j),probsval.at(j)/probs_sum.at(j%rev_val));
+			}
+		}
+	}
+
+	void set_random_probs(){
+		iter(i,nodes.size()){
+			iter(j,nodes.at(i).probs.size()){
+				nodes.at(i).probs.at(j) = rand()/(double)(RAND_MAX);
 			}
 		}
 	}
@@ -356,7 +376,7 @@ public:
 
 	}
 
-	int get_count(int col, float val){
+	int get_count(int col, double val){
 		int count(0);
 		iter(i,data_transpose.at(col).size()){
 			if(data_transpose.at(col).at(i)==val) count++;
@@ -364,8 +384,8 @@ public:
 		return count;
 	}
 
-	float get_count_vec(vector<pair<int,int> > locs){
-		int count(0);
+	double get_count_vec(vector<pair<int,int> > locs){
+		double count(0);
 		iter(i,data.size()){
 			bool should_be_counted=true;
 			iter(j,locs.size()){
@@ -373,10 +393,15 @@ public:
 			}
 			if(should_be_counted) count++;
 		}
+		return count;
+	}
+
+	double get_count_vec2(vector<pair<int,int> > locs){
+		double count(0);
 		iter(i,missing_distributions.size()){
 			bool should_be_counted=true;
 			iter(j,locs.size()){
-				if(missing_distributions.at(i).second.at(locs.at(j).first)!=locs.at(j).second) should_be_counted=false;
+				if((int)(missing_distributions.at(i).second.at(locs.at(j).first))!=locs.at(j).second) should_be_counted=false;
 			}
 			if(should_be_counted) count+=missing_distributions.at(i).first;
 		}
@@ -384,7 +409,7 @@ public:
 	}
 
 	int get_sum(int col){
-		float sum(0);
+		double sum(0);
 		iter(i,data_transpose.at(col).size()) sum+=data_transpose.at(col).at(i);
 		return sum;
 	}
@@ -396,8 +421,8 @@ public:
 		}
 		return out;
 	}
-	float get_diff(graph g){
-		float diff;
+	double get_diff(graph g){
+		double diff;
 		iter(i,nodes.size()){
 			iter(j,nodes.at(i).probs.size()){
 				diff+=fabs(nodes.at(i).probs.at(j)-g.nodes.at(i).probs.at(j));
@@ -414,17 +439,26 @@ int main(int argc, char* argv[]){
 	graph g2;
 	g2.init("./gold_alarm.bif");
 	g.read_records("./records.dat");
-	g.smoothing=0;
-	int i=10;
+	g.smoothing=10;
+	g.get_complete_probs();
 	cout<<"Initial error:"<<g.get_diff(g2)<<endl;
+	iter(i,g.missing_distributions.size()) cout<<g.missing_distributions.at(i).first<<" ";
+	cout<<endl;
+	g.get_complete_probs();
+	g.write_bif("./alarm.bif","./init_alarm.bif");
+	vec tt(37,0);
+	cout<<"ABD "<<g.get_likelihood(tt)<<endl;
+	//initial value of probs.	
 	double t_final=get_wall_time();
 	while(t_final-t_init<570){
-		g.maximization_step();
+		cout<<g.missing_distributions.size()<<endl;
 		g.expectation_step();
-		cout<<"EM step complete, error:"<<g.get_diff(g2)<<",in time "<<t_final<<"."<<endl;
+		cout<<g.missing_distributions.size()<<endl;
+		g.maximization_step();	
+		cout<<"EM step complete, error:"<<g.get_diff(g2)<<",in time "<<t_final-t_init<<" seconds."<<endl;
 		t_final=get_wall_time();	
+		g.write_bif("./alarm.bif","./solved_alarm.bif");
 	}
-	g.write_bif("./alarm.bif","./solved_alarm.bif");
 	cout<<g.data.size()<<" "<<g.data.at(0).size()<<endl;
 	return 0;
 }
