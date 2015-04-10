@@ -9,6 +9,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <cmath>
+#include <sys/time.h>
 
 using namespace std;
 
@@ -24,6 +25,12 @@ typedef vector<float> vec;
 
 #define iter(i,max) for(int i=0;i<(int)(max);i++)
 #define itervec(i,v) for(typeof(v.begin()) i = c.begin(); i != c.end(); i++)
+
+double get_wall_time(){
+	struct timeval tim;
+	if(gettimeofday(&tim, NULL)) return 0;
+	return (double)tim.tv_sec + (double)tim.tv_usec * .000001;
+}
 
 class node{
 public:
@@ -401,18 +408,21 @@ public:
 };
 
 int main(int argc, char* argv[]){
+	double t_init=get_wall_time();
 	graph g;
 	g.init("./alarm.bif");
 	graph g2;
 	g2.init("./gold_alarm.bif");
 	g.read_records("./records.dat");
-	g.smoothing=1;
+	g.smoothing=0;
 	int i=10;
 	cout<<"Initial error:"<<g.get_diff(g2)<<endl;
-	while(i--){
+	double t_final=get_wall_time();
+	while(t_final-t_init<570){
 		g.maximization_step();
 		g.expectation_step();
-		cout<<"EM step complete, error:"<<g.get_diff(g2)<<endl;
+		cout<<"EM step complete, error:"<<g.get_diff(g2)<<",in time "<<t_final<<"."<<endl;
+		t_final=get_wall_time();	
 	}
 	g.write_bif("./alarm.bif","./solved_alarm.bif");
 	cout<<g.data.size()<<" "<<g.data.at(0).size()<<endl;
